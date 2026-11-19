@@ -23,8 +23,12 @@ try:
     db = client.get_default_database()
     app.config["DB_MODE"] = "mongodb"
 except Exception:
+    if os.getenv("MONGO_URI"):
+        raise RuntimeError("Could not connect to MongoDB Atlas. Check your MONGO_URI and network access.")
+
     if mongomock is None:
         raise RuntimeError("MongoDB is unavailable and mongomock is not installed.")
+
     client = mongomock.MongoClient()
     db = client.vaccine_supply_chain
     app.config["DB_MODE"] = "mock"
