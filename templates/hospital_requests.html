@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Request Vaccines</h1>
+        <p>Submit vaccine requests and track their progress.</p>
+    </div>
+</div>
+
+<div class="card form-panel">
+    <form method="post" action="{{ url_for('hospital_requests') }}" class="styled-form grid-form">
+        <label>Vaccine Name
+            <select name="vaccine_id" required>
+                {% for vaccine in vaccines %}
+                <option value="{{ vaccine._id }}">{{ vaccine.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Quantity Requested<input type="number" name="quantity_requested" min="1" required></label>
+        <label>Urgency
+            <select name="urgency">
+                <option>Normal</option>
+                <option>High</option>
+                <option>Critical</option>
+            </select>
+        </label>
+        <label class="full-width">Reason for Request<textarea name="reason"></textarea></label>
+        <div class="form-actions full-width"><button type="submit" class="primary-btn">Submit Request</button></div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Request Status</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Vaccine</th><th>Qty</th><th>Urgency</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.vaccine_name }}</td>
+                <td>{{ req.quantity_requested }}</td>
+                <td>{{ req.urgency }}</td>
+                <td>{{ req.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">No requests submitted.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

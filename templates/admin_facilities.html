@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Facilities</h1>
+        <p>Monitor all registered facilities and their operational status.</p>
+    </div>
+</div>
+
+<div class="card">
+    <form method="get" class="filter-inline">
+        <input type="text" name="q" placeholder="Search facility, province or zone">
+        <input type="text" name="province" placeholder="Province">
+        <input type="text" name="health_zone" placeholder="Health zone">
+        <button type="submit" class="primary-btn">Search</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>All Facilities</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Facility</th>
+                <th>Type</th>
+                <th>Province</th>
+                <th>Zone</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for facility in facilities %}
+            <tr>
+                <td>{{ facility.facility_name }}</td>
+                <td>{{ facility.facility_type }}</td>
+                <td>{{ facility.province }}</td>
+                <td>{{ facility.health_zone }}</td>
+                <td><span class="status-pill {{ facility.status|lower|replace(' ', '-') }}">{{ facility.status }}</span></td>
+                <td>
+                    <form method="post" action="{{ url_for('update_facility_status', facility_id=facility._id) }}" class="inline-form">
+                        <select name="status">
+                            <option value="Active">Active</option>
+                            <option value="Pending Approval">Pending Approval</option>
+                            <option value="Suspended">Suspended</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                        <input type="text" name="reason" placeholder="Reason (optional)">
+                        <button type="submit" class="secondary-btn">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6">No facilities found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Add Inventory Batch</h1>
+        <p>Add a new vaccine batch for this facility.</p>
+    </div>
+</div>
+
+<div class="card form-panel">
+    <form method="post" action="{{ url_for('hospital_inventory_add') }}" class="styled-form grid-form">
+        <label>Vaccine Name
+            <select name="vaccine_id" required>
+                {% for vaccine in vaccines %}
+                <option value="{{ vaccine._id }}">{{ vaccine.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Manufacturer<input type="text" name="manufacturer"></label>
+        <label>Donor / Supplier<input type="text" name="supplier"></label>
+        <label>Batch Number<input type="text" name="batch_number" required></label>
+        <label>Quantity Received<input type="number" name="quantity_received" min="1" required></label>
+        <label>Minimum Stock Level<input type="number" name="minimum_stock" min="0" value="0"></label>
+        <label>Expiry Date<input type="date" name="expiry_date"></label>
+        <label>Date Received<input type="date" name="date_received"></label>
+        <div class="form-actions full-width">
+            <button type="submit" class="primary-btn">Save Batch</button>
+            <a href="{{ url_for('hospital_inventory') }}" class="secondary-btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

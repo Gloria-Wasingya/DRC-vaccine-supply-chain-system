@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Incoming Transfers</h1>
+        <p>Review transfer details and confirm receipt when stock arrives.</p>
+    </div>
+</div>
+
+<div class="card">
+    <table class="data-table">
+        <thead>
+            <tr><th>Supplier</th><th>Vaccine</th><th>Qty</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            {% for transfer in transfers %}
+            <tr>
+                <td>{{ transfer.supplier_name }}</td>
+                <td>{{ transfer.vaccine_name }}</td>
+                <td>{{ transfer.quantity }}</td>
+                <td>{{ transfer.status }}</td>
+                <td>
+                    {% if transfer.status != 'Received' %}
+                    <form method="post" action="{{ url_for('confirm_transfer_receipt', transfer_id=transfer._id) }}">
+                        <button type="submit" class="primary-btn">Confirm Receipt</button>
+                    </form>
+                    {% else %}
+                    <span>Complete</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">No incoming transfers.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

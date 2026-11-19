@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Facility Registration</h1>
+        <p>Register a hospital, health centre, or clinic to begin access.</p>
+    </div>
+</div>
+
+<div class="card form-panel">
+    <form method="post" action="{{ url_for('register_facility') }}" class="styled-form grid-form">
+        <label>Facility Name<input type="text" name="facility_name" value="{{ form_data.get('facility_name', '') if form_data else '' }}" required></label>
+        <label>Facility Type
+            <select name="facility_type">
+                <option {% if not form_data or form_data.get('facility_type') == 'Hospital' %}selected{% endif %}>Hospital</option>
+                <option {% if form_data and form_data.get('facility_type') == 'Health Centre' %}selected{% endif %}>Health Centre</option>
+                <option {% if form_data and form_data.get('facility_type') == 'Clinic' %}selected{% endif %}>Clinic</option>
+            </select>
+        </label>
+        <label>Province<input type="text" name="province" value="{{ form_data.get('province', '') if form_data else '' }}" required></label>
+        <label>Health Zone<input type="text" name="health_zone" value="{{ form_data.get('health_zone', '') if form_data else '' }}" required></label>
+        <label>Physical Address<input type="text" name="address" value="{{ form_data.get('address', '') if form_data else '' }}" required></label>
+        <label>Contact Person<input type="text" name="contact_person" value="{{ form_data.get('contact_person', '') if form_data else '' }}" required></label>
+        <label>Phone Number<input type="tel" name="phone_number" value="{{ form_data.get('phone_number', '') if form_data else '' }}" required></label>
+        <label>Official Registration Number<input type="text" name="registration_number" value="{{ form_data.get('registration_number', '') if form_data else '' }}"></label>
+        <label>Email Address<input type="email" name="email" value="{{ form_data.get('email', '') if form_data else '' }}" required></label>
+        <label>Username
+            <input id="username" type="text" name="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9._-]+" autocomplete="username" value="{{ form_data.get('username', '') if form_data else '' }}" aria-describedby="username-help" required>
+            <small id="username-help" class="field-help">Use 3–30 letters, numbers, dots, underscores or hyphens.</small>
+        </label>
+        <label>Password<input type="password" name="password" required></label>
+
+        <div class="form-actions full-width">
+            <button type="submit" class="primary-btn">Submit Registration</button>
+            <a href="{{ url_for('login') }}" class="secondary-btn">Back to Login</a>
+        </div>
+    </form>
+</div>
+<script>
+    const usernameInput = document.getElementById('username');
+    const usernameHelp = document.getElementById('username-help');
+    let usernameCheck;
+
+    usernameInput.addEventListener('input', () => {
+        clearTimeout(usernameCheck);
+        const username = usernameInput.value.trim();
+        usernameHelp.textContent = 'Checking username...';
+        usernameHelp.className = 'field-help';
+        usernameCheck = setTimeout(async () => {
+            if (!username) {
+                usernameHelp.textContent = 'Use 3–30 letters, numbers, dots, underscores or hyphens.';
+                return;
+            }
+            try {
+                const response = await fetch(`{{ url_for('check_username') }}?username=${encodeURIComponent(username)}`);
+                if (!response.ok) throw new Error('Username availability check failed.');
+                const result = await response.json();
+                usernameHelp.textContent = result.message;
+                usernameHelp.className = result.available ? 'field-help available' : 'field-help unavailable';
+            } catch (error) {
+                usernameHelp.textContent = 'Could not check availability. The username will be checked when you submit.';
+                usernameHelp.className = 'field-help';
+            }
+        }, 250);
+    });
+
+    if (usernameInput.value) {
+        usernameInput.dispatchEvent(new Event('input'));
+    }
+</script>
+{% endblock %}

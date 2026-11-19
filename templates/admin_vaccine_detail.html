@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ vaccine.name }}</h1>
+        <p>Vaccine catalogue record</p>
+    </div>
+    <div class="button-stack">
+        <a href="{{ url_for('edit_vaccine', vaccine_id=vaccine._id) }}" class="primary-btn">Edit Vaccine</a>
+        <a href="{{ url_for('admin_vaccines') }}" class="secondary-btn">Back to Catalogue</a>
+    </div>
+</div>
+
+<div class="card profile-card">
+    <div class="profile-row"><strong>Status</strong><br><span class="status-pill {{ vaccine.status|lower }}">{{ vaccine.status|title }}</span></div>
+    <div class="profile-row"><strong>Manufacturer</strong><br>{{ vaccine.manufacturer }}</div>
+    <div class="profile-row"><strong>Type</strong><br>{{ vaccine.type }}</div>
+    <div class="profile-row"><strong>Dosage</strong><br>{{ vaccine.dosage or 'Not specified' }}</div>
+    <div class="profile-row"><strong>Doses Required</strong><br>{{ vaccine.doses_required }}</div>
+    <div class="profile-row"><strong>Storage Requirements</strong><br>{{ vaccine.storage_requirements or 'Not specified' }}</div>
+    <div class="profile-row"><strong>Donor / Supplier</strong><br>{{ vaccine.supplier or 'Not specified' }}</div>
+    <div class="profile-row"><strong>Description</strong><br>{{ vaccine.description or 'No description provided.' }}</div>
+</div>
+{% endblock %}

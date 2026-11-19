@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>My Profile</h1>
+        <p>Facility details and registration overview.</p>
+    </div>
+</div>
+
+<div class="card profile-card">
+    <div class="profile-row"><strong>Facility Name:</strong> {{ facility.facility_name }}</div>
+    <div class="profile-row"><strong>Facility Type:</strong> {{ facility.facility_type }}</div>
+    <div class="profile-row"><strong>Province:</strong> {{ facility.province }}</div>
+    <div class="profile-row"><strong>Health Zone:</strong> {{ facility.health_zone }}</div>
+    <div class="profile-row"><strong>Address:</strong> {{ facility.address }}</div>
+    <div class="profile-row"><strong>Contact Person:</strong> {{ facility.contact_person }}</div>
+    <div class="profile-row"><strong>Phone Number:</strong> {{ facility.phone_number }}</div>
+    <div class="profile-row"><strong>Email:</strong> {{ facility.email }}</div>
+    <div class="profile-row"><strong>Status:</strong> {{ facility.status }}</div>
+</div>
+{% endblock %}

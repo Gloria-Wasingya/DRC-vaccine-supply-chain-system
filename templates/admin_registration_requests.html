@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Registration Requests</h1>
+        <p>Review and approve new facility applications.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Pending Requests</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Facility</th><th>Province</th><th>Zone</th><th>Contact</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for facility in facilities %}
+            <tr>
+                <td>{{ facility.facility_name }}<br><small>{{ facility.facility_type }}</small></td>
+                <td>{{ facility.province }}</td>
+                <td>{{ facility.health_zone }}</td>
+                <td>{{ facility.contact_person }}<br>{{ facility.email }}</td>
+                <td>
+                    <div class="button-stack">
+                        <form method="post" action="{{ url_for('approve_registration', facility_id=facility._id) }}">
+                            <button type="submit" class="primary-btn">Approve</button>
+                        </form>
+                        <form method="post" action="{{ url_for('reject_registration', facility_id=facility._id) }}">
+                            <input type="text" name="reason" placeholder="Reject reason">
+                            <button type="submit" class="danger-btn">Reject</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">No pending registrations.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h3>Reviewed Requests</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Facility</th><th>Status</th><th>Updated</th></tr>
+        </thead>
+        <tbody>
+            {% for facility in reviewed %}
+            <tr>
+                <td>{{ facility.facility_name }}</td>
+                <td>{{ facility.status }}</td>
+                <td>{{ facility.updated_at.strftime('%Y-%m-%d') if facility.updated_at else '' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="3">No reviewed requests</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

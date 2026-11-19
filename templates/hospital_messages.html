@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Messages / Contact Admin</h1>
+        <p>Send updates, shortage reports, and requests for support.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Send Message</h3>
+    <form method="post" action="{{ url_for('hospital_messages') }}" class="styled-form">
+        <label>Message<textarea name="message" rows="4" required></textarea></label>
+        <button type="submit" class="primary-btn">Send</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Message History</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Sender</th><th>Message</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for msg in messages %}
+            <tr>
+                <td>{{ msg.sender }}</td>
+                <td>{{ msg.content }}</td>
+                <td>{{ msg.created_at.strftime('%Y-%m-%d %H:%M') if msg.created_at else '' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="3">No messages available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

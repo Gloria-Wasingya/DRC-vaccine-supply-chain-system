@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        {% if user %}
+            <aside class="sidebar">
+                <div class="brand-box">
+                    <div class="brand-mark">
+                        <img src="{{ url_for('static', filename='images/drc-health-logo.png') }}" alt="DRC Ministry of Health">
+                    </div>
+                    <div>
+                        <h2>DRC Vaccine</h2>
+                        <p>supply chain</p>
+                    </div>
+                </div>
+
+                {% if user.role == 'ministry_admin' %}
+                    <nav>
+                        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                        <a href="{{ url_for('admin_facilities') }}">Facilities</a>
+                        <a href="{{ url_for('registration_requests') }}">Registration Requests</a>
+                        <a href="{{ url_for('admin_vaccines') }}">Vaccines</a>
+                        <a href="{{ url_for('admin_inventory') }}">Inventory Monitoring</a>
+                        <a href="{{ url_for('admin_requests') }}">Vaccine Requests</a>
+                        <a href="{{ url_for('admin_transfers') }}">Transfers / Distribution</a>
+                        <a href="{{ url_for('admin_messages') }}">Messages / Notifications</a>
+                        <a href="{{ url_for('admin_reports') }}">Reports</a>
+                    </nav>
+                {% else %}
+                    <nav>
+                        <a href="{{ url_for('hospital_dashboard') }}">Dashboard</a>
+                        <a href="{{ url_for('hospital_inventory') }}">My Inventory</a>
+                        <a href="{{ url_for('hospital_register_stock') }}">Register New Stock</a>
+                        <a href="{{ url_for('hospital_usage') }}">Record Vaccine Usage</a>
+                        <a href="{{ url_for('hospital_requests') }}">Request Vaccines</a>
+                        <a href="{{ url_for('hospital_transfers') }}">Incoming Transfers</a>
+                        <a href="{{ url_for('hospital_messages') }}">Messages / Contact Admin</a>
+                        <a href="{{ url_for('hospital_profile') }}">My Profile</a>
+                    </nav>
+                {% endif %}
+                <div class="sidebar-footer">
+                    <p>{{ user.full_name or user.username }}</p>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </aside>
+        {% endif %}
+
+        <main class="page-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-stack">
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

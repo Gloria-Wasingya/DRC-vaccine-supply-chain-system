@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>My Inventory</h1>
+        <p>Monitor vaccine availability and batch-level stock.</p>
+    </div>
+    <a href="{{ url_for('hospital_inventory_add') }}" class="primary-btn">Add Inventory Batch</a>
+</div>
+
+<div class="card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Vaccine</th>
+                <th>Manufacturer</th>
+                <th>Batch</th>
+                <th>Quantity</th>
+                <th>Expiry</th>
+                <th>Min</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row.vaccine_name }}</td>
+                <td>{{ row.manufacturer }}</td>
+                <td>{{ row.batch_number }}</td>
+                <td>{{ row.quantity_available }}</td>
+                <td>{{ row.expiry_date }}</td>
+                <td>{{ row.minimum_stock }}</td>
+                <td><span class="status-pill {{ row.status|lower|replace(' ', '-') }}">{{ row.status }}</span></td>
+                <td>
+                    <div class="button-stack">
+                        <a href="{{ url_for('hospital_inventory_edit', inventory_id=row._id) }}" class="secondary-btn">Edit</a>
+                        <form method="post" action="{{ url_for('hospital_inventory_delete', inventory_id=row._id) }}">
+                            <button type="submit" class="danger-btn">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="8">No inventory records found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

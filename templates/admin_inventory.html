@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Inventory Monitoring</h1>
+        <p>Track vaccine batches across all facilities.</p>
+    </div>
+</div>
+
+<div class="card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Facility</th>
+                <th>Province</th>
+                <th>Zone</th>
+                <th>Vaccine</th>
+                <th>Batch</th>
+                <th>Qty</th>
+                <th>Expiry</th>
+                <th>Min</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.facility_name }}</td>
+                <td>{{ record.province }}</td>
+                <td>{{ record.health_zone }}</td>
+                <td>{{ record.vaccine_name }}</td>
+                <td>{{ record.batch_number }}</td>
+                <td>{{ record.quantity_available }}</td>
+                <td>{{ record.expiry_date }}</td>
+                <td>{{ record.minimum_stock }}</td>
+                <td><span class="status-pill {{ record.status|lower|replace(' ', '-') }}">{{ record.status }}</span></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="9">No inventory records available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

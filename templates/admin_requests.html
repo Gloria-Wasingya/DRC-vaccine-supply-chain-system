@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Vaccine Requests</h1>
+        <p>Review vaccine requests from hospitals and health centres.</p>
+    </div>
+</div>
+
+<div class="card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Requesting Facility</th>
+                <th>Vaccine</th>
+                <th>Qty</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.facility_name }}</td>
+                <td>{{ req.vaccine_name }}</td>
+                <td>{{ req.quantity_requested }}</td>
+                <td>{{ req.urgency }}</td>
+                <td>{{ req.status }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('update_request_status', request_id=req._id) }}" class="inline-form">
+                        <select name="status">
+                            <option value="Pending">Pending</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Transfer in Progress">Transfer in Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                        <button type="submit" class="primary-btn">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6">No vaccine requests yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

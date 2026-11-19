@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Messages and Notifications</h1>
+        <p>Communicate updates and manage alerts across facilities.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Send a reply</h3>
+    <form method="post" action="{{ url_for('admin_reply_message') }}" class="styled-form">
+        <label>Facility
+            <select name="facility_id">
+                {% for facility in facilities %}
+                <option value="{{ facility._id }}">{{ facility.facility_name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Message
+            <textarea name="message" rows="4" required></textarea>
+        </label>
+        <button type="submit" class="primary-btn">Send Reply</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Recent Messages</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Facility</th><th>Sender</th><th>Message</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for msg in messages %}
+            <tr>
+                <td>{{ msg.facility_name }}</td>
+                <td>{{ msg.sender }}</td>
+                <td>{{ msg.content }}</td>
+                <td>{{ msg.created_at.strftime('%Y-%m-%d %H:%M') if msg.created_at else '' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">No messages found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

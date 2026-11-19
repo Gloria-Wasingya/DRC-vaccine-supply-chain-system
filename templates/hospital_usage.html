@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Record Vaccine Usage</h1>
+        <p>Document administered doses and automatically deduct them from stock.</p>
+    </div>
+</div>
+
+<div class="card form-panel">
+    <form method="post" action="{{ url_for('hospital_usage') }}" class="styled-form grid-form">
+        <label>Vaccine Name
+            <select name="vaccine_id" required>
+                {% for vaccine in vaccines %}
+                <option value="{{ vaccine._id }}">{{ vaccine.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Batch Number<input type="text" name="batch_number" required></label>
+        <label>Quantity Administered<input type="number" name="quantity_administered" min="1" required></label>
+        <label>Date Administered<input type="date" name="date_administered"></label>
+        <label>Staff Member<input type="text" name="staff_member" required></label>
+        <div class="form-actions full-width"><button type="submit" class="primary-btn">Record Usage</button></div>
+    </form>
+</div>
+{% endblock %}

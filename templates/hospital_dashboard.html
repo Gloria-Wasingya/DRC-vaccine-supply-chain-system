@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ facility.facility_name }} Dashboard</h1>
+        <p>Operational health overview for your facility.</p>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card"><span>Total Vaccine Types</span><strong>{{ stats.total_vaccine_types }}</strong></div>
+    <div class="stat-card"><span>Total Available Doses</span><strong>{{ stats.total_available_doses }}</strong></div>
+    <div class="stat-card warning"><span>Low-Stock Vaccines</span><strong>{{ stats.low_stock }}</strong></div>
+    <div class="stat-card danger"><span>Out-of-Stock Items</span><strong>{{ stats.out_of_stock }}</strong></div>
+    <div class="stat-card"><span>Incoming Transfers</span><strong>{{ stats.incoming_transfers }}</strong></div>
+</div>
+
+<div class="card">
+    <h3>Recent Stock Activities</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Type</th><th>Vaccine</th><th>Qty</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for item in stats.recent_activities %}
+            <tr>
+                <td>{{ item.type }}</td>
+                <td>{{ item.vaccine_id }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.date }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">No recent stock activity.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

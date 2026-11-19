@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ 'Add New Vaccine' if is_new else 'Edit Vaccine' }}</h1>
+        <p>{{ 'Register a vaccine in the official catalogue.' if is_new else 'Update catalogue details used by every facility.' }}</p>
+    </div>
+</div>
+
+<div class="card form-panel">
+    <form method="post" action="{{ url_for('add_vaccine') if is_new else url_for('edit_vaccine', vaccine_id=vaccine._id) }}" class="styled-form grid-form">
+        <label>Vaccine Name<input type="text" name="name" maxlength="120" value="{{ vaccine.name or '' }}" required></label>
+        <label>Manufacturer<input type="text" name="manufacturer" maxlength="120" value="{{ vaccine.manufacturer or '' }}" required></label>
+        <label>Vaccine Type<input type="text" name="type" maxlength="80" value="{{ vaccine.type or '' }}" required></label>
+        <label>Doses Required<input type="number" name="doses_required" min="1" step="1" value="{{ vaccine.doses_required or 1 }}" required></label>
+        <label>Dosage<input type="text" name="dosage" maxlength="120" value="{{ vaccine.dosage or '' }}" placeholder="e.g. 0.5 mL"></label>
+        <label>Storage Requirements<input type="text" name="storage_requirements" maxlength="500" value="{{ vaccine.storage_requirements or '' }}" placeholder="e.g. Store at 2-8°C"></label>
+        <label>Donor / Supplier<input type="text" name="supplier" maxlength="120" value="{{ vaccine.supplier or '' }}"></label>
+        <label>Status
+            <select name="status">
+                <option value="active" {% if vaccine.status == 'active' %}selected{% endif %}>Active</option>
+                <option value="inactive" {% if vaccine.status == 'inactive' %}selected{% endif %}>Inactive</option>
+            </select>
+        </label>
+        <label class="full-width">Description<textarea name="description" maxlength="2000">{{ vaccine.description or '' }}</textarea></label>
+        <div class="form-actions full-width">
+            <button type="submit" class="primary-btn">{{ 'Create Vaccine' if is_new else 'Save Changes' }}</button>
+            <a href="{{ url_for('admin_vaccines') }}" class="secondary-btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

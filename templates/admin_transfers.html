@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Transfers / Distribution</h1>
+        <p>Coordinate supply transfers between facilities and the Ministry.</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Create Transfer</h3>
+    <form method="post" action="{{ url_for('create_transfer') }}" class="styled-form grid-form">
+        <label>Supplying Facility
+            <select name="supplier_facility_id">
+                {% for facility in facilities %}
+                <option value="{{ facility._id }}">{{ facility.facility_name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Receiving Facility
+            <select name="recipient_facility_id">
+                {% for facility in facilities %}
+                <option value="{{ facility._id }}">{{ facility.facility_name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Vaccine
+            <select name="vaccine_id">
+                {% for vaccine in vaccines %}
+                <option value="{{ vaccine._id }}">{{ vaccine.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Quantity<input type="number" name="quantity" min="1" required></label>
+        <label>Batch Number<input type="text" name="batch_number"></label>
+        <div class="form-actions full-width"><button type="submit" class="primary-btn">Create Transfer</button></div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Transfer History</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Supplier</th><th>Recipient</th><th>Vaccine</th><th>Qty</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            {% for transfer in transfers %}
+            <tr>
+                <td>{{ transfer.supplier_name }}</td>
+                <td>{{ transfer.recipient_name }}</td>
+                <td>{{ transfer.vaccine_name }}</td>
+                <td>{{ transfer.quantity }}</td>
+                <td>{{ transfer.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">No transfers recorded.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

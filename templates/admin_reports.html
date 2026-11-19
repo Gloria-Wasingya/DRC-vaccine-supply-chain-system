@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Reports</h1>
+        <p>Review vaccine utilization, shortages, and distribution insights.</p>
+    </div>
+</div>
+
+<div class="two-col-layout">
+    <div class="card">
+        <h3>Recent Vaccine Usage</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>Vaccine</th><th>Qty</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+                {% for item in usage %}
+                <tr>
+                    <td>{{ item.vaccine_id }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.date }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3">No usage records.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Shortage / Request Overview</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>Facility</th><th>Vaccine</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                {% for item in shortages %}
+                <tr>
+                    <td>{{ item.facility_id }}</td>
+                    <td>{{ item.vaccine_id }}</td>
+                    <td>{{ item.status }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3">No shortage reports.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

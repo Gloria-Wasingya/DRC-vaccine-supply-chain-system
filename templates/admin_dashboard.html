@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Ministry Dashboard</h1>
+        <p>Operation overview for the vaccine supply network.</p>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card"><span>Total Registered Facilities</span><strong>{{ stats.total_facilities }}</strong></div>
+    <div class="stat-card"><span>Pending Registrations</span><strong>{{ stats.pending_registrations }}</strong></div>
+    <div class="stat-card"><span>Total Vaccine Types</span><strong>{{ stats.total_vaccine_types }}</strong></div>
+    <div class="stat-card"><span>Total Available Stock</span><strong>{{ stats.total_available_stock }}</strong></div>
+    <div class="stat-card warning"><span>Low Stock Alerts</span><strong>{{ stats.low_stock_alerts }}</strong></div>
+    <div class="stat-card danger"><span>Out-of-Stock Facilities</span><strong>{{ stats.out_of_stock }}</strong></div>
+    <div class="stat-card"><span>Pending Requests</span><strong>{{ stats.pending_requests }}</strong></div>
+    <div class="stat-card"><span>Open Notifications</span><strong>{{ stats.notifications|length }}</strong></div>
+</div>
+
+<div class="two-col-layout">
+    <div class="card">
+        <h3>Recent Notifications</h3>
+        <ul class="list-view">
+            {% for note in stats.notifications %}
+                <li><strong>{{ note.title }}</strong><br><small>{{ note.message }}</small></li>
+            {% else %}
+                <li>No notifications yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Recent Transfers</h3>
+        <ul class="list-view">
+            {% for transfer in stats.recent_transfers %}
+                <li><strong>{{ transfer.status }}</strong>: {{ transfer.quantity }} units</li>
+            {% else %}
+                <li>No transfers logged.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Recent Activity</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Action</th><th>Details</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for log in stats.recent_activities %}
+            <tr>
+                <td>{{ log.action }}</td>
+                <td>{{ log.details or log.reason or log.status or 'System update' }}</td>
+                <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M') if log.created_at else '' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="3">No recent activity.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

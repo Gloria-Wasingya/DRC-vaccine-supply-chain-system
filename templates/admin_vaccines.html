@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Vaccine Catalogue</h1>
+        <p>Manage the official vaccine list used by hospitals and health centres.</p>
+    </div>
+    <a href="{{ url_for('add_vaccine') }}" class="primary-btn">Add New Vaccine</a>
+</div>
+
+<div class="card">
+    <h3>Current Vaccines</h3>
+    <table class="data-table">
+        <thead>
+            <tr><th>Vaccine</th><th>Manufacturer</th><th>Type</th><th>Dosage</th><th>Storage</th><th>Doses</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for vaccine in vaccines %}
+            <tr>
+                <td><a href="{{ url_for('view_vaccine', vaccine_id=vaccine._id) }}">{{ vaccine.name }}</a></td>
+                <td>{{ vaccine.manufacturer }}</td>
+                <td>{{ vaccine.type }}</td>
+                <td>{{ vaccine.dosage or '—' }}</td>
+                <td>{{ vaccine.storage_requirements or '—' }}</td>
+                <td>{{ vaccine.doses_required }}</td>
+                <td><span class="status-pill {{ vaccine.status|lower }}">{{ vaccine.status|title }}</span></td>
+                <td>
+                    <div class="button-stack">
+                        <a href="{{ url_for('view_vaccine', vaccine_id=vaccine._id) }}" class="secondary-btn">View</a>
+                        <a href="{{ url_for('edit_vaccine', vaccine_id=vaccine._id) }}" class="secondary-btn">Edit</a>
+                        <form method="post" action="{{ url_for('toggle_vaccine_status', vaccine_id=vaccine._id) }}">
+                            <button type="submit" class="{{ 'primary-btn' if vaccine.status != 'active' else 'secondary-btn' }}">{{ 'Activate' if vaccine.status != 'active' else 'Deactivate' }}</button>
+                        </form>
+                        <form method="post" action="{{ url_for('delete_vaccine', vaccine_id=vaccine._id) }}" onsubmit="return confirm('Permanently delete this vaccine? This action cannot be undone.');">
+                            <button type="submit" class="danger-btn">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="8">No vaccines available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
